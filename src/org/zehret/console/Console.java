@@ -81,7 +81,7 @@ public class Console
 		consoleWindow.updateFullscreen();
 		if(ConsoleProperties.AUTOSTART_EVENT_HANDLER)
 			new Thread(eventHandler = new EventHandler()).start();
-		new Thread(new SysOutCapture()).start();
+		//new Thread(new SysOutCapture()).start();
 	}
 	
 	public static boolean toggleConsole()
