@@ -29,24 +29,8 @@ public class TestClass
 		new Console();
 		
 		new PL(); 
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.currentTimeMillis());
 		PL.con("normal, no value for severity");
+		//PL.con(invalidInputMessage);
 		//ConsoleWindow.help();
 		ConsoleProperties.BACKGROUND_COLOR = Color.blue;
 		PL.con("abnormal, extreme value for severity",43262546);

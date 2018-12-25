@@ -1,6 +1,5 @@
 package org.zehret.console.util;
 
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.PrintWriter;
@@ -16,13 +15,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.zehret.console.Console;
+import org.zehret.console.data.ConsolePrintData;
 import org.zehret.console.data.error.Errors;
 
 /**
  * 
  * @author Zachary Ehret
  * 
- * @version 0.9
+ * @version 1.1
  * This class is the worker class for printing to the console/system and for logging important information to file in the location of /log/console/out/T[YYYY]-[MM]-[DD]x[HH].[MM].[SS].[MS].log
  * All data dumps or debug information the console itself creates will be saved in various locations such as /log/console/pl/T[YYYY]-[MM]-[DD]x[HH].[MM].[SS].[MS].log OR /log/console/window/T[YYYY]-[MM]-[DD]x[HH].[MM].[SS].[MS].log OR /log/console/cmd/T[YYYY]-[MM]-[DD]x[HH].[MM].[SS].[MS].log OR /log/console/version/T[YYYY]-[MM]-[DD]x[HH].[MM].[SS].[MS].log
  */
@@ -349,5 +349,13 @@ public class PL
 			ConsoleProperties.AUTO_RESET_CUSTOM_COLOR = temp;
 			return report;
 		} catch (Exception e) { return e.getMessage(); }
+	}
+
+	public static void con(ConsolePrintData cpd) {
+		if((cpd.getPrefix() > PRIORITY_INFO)&&(cpd.getPrefix() < NONE)) {
+			ConsoleProperties.BACKGROUND_CUSTOM_COLOR = cpd.getBackgroundColor();
+			ConsoleProperties.MSG_CUSTOM_COLOR = cpd.getTextColor();
+		}
+		con(cpd.getPrintMessage(), cpd.getPrefix(), cpd.getAlertStatus());
 	}
 }

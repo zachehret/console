@@ -206,6 +206,8 @@ public class ConsoleProperties {
 	public static String MESSAGE$CONFLICT_CFG_SHOWCONSOLE_CMDLINE = Errors.CONFLICTING_CONFIGURATION.getMessage() + "<SHOW_CONSOLE[boolean]> & <SHOW_CMD_LINE[boolean]>";
 
 	public static boolean ENTRY_LINEWRAP = false;
+
+	public static boolean PAINT_PROGRESS_PERCENTAGE = true;
 	
 	/**
 	 * Print the configuration in the system console or console application.
@@ -223,6 +225,7 @@ public class ConsoleProperties {
 		printcfg("AUTOSTART_EVENT_HANDLER",""+AUTOSTART_EVENT_HANDLER,inConsole);
 		printcfg("ENTRY_LINEWRAP",""+ENTRY_LINEWRAP,inConsole);
 		printcfg("SHOW_ENTRY_IDENTIFIER",SHOW_ENTRY_IDENTIFIER+"",inConsole);
+		printcfg("PAINT_PROGRESS_PERCENTAGE",PAINT_PROGRESS_PERCENTAGE+"",inConsole);
 		
 		printcfg("LOG_CHARACTER_PREFIX",LOG_CHARACTER_PREFIX+"",inConsole);
 		printcfg("PROMPT_INPUT_CENSOR",PROMPT_INPUT_CENSOR+"",inConsole);

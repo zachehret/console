@@ -1,20 +1,14 @@
 package org.zehret.console;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Date;
-
 import org.zehret.console.data.CommandHandler;
-import org.zehret.console.data.SysOutCapture;
+import org.zehret.console.data.ConsolePrintData;
 import org.zehret.console.data.error.Errors;
 import org.zehret.console.data.event.EventHandler;
-import org.zehret.console.data.sys.ConsoleOutputCapturer;
 import org.zehret.console.data.version.DateVersionFormat;
 import org.zehret.console.data.version.Version;
 import org.zehret.console.gui.NewConsoleWindow;
 import org.zehret.console.gui.ProcessingPopup;
 import org.zehret.console.util.ConsoleProperties;
-import org.zehret.console.util.FontSet;
 import org.zehret.console.util.PL;
 
 public class Console
@@ -27,7 +21,7 @@ public class Console
 	
 	public static NewConsoleWindow consoleWindow;
 	
-	public static Version version = new Version(new DateVersionFormat("A14.2018.11.02-18:18:42"));
+	public static Version version = new Version(new DateVersionFormat("A16.2018.12.24-20:34:26"));
 	
 	private static ProcessingPopup processing;
 	
@@ -37,6 +31,8 @@ public class Console
 	 * use in prompts
 	 */
 	public static final int CENSORINPUTOPTION = 0, SHOWINPUTOPTION = 1, HIDEINPUTOPTION = 2, DEFAULTINPUTOPTION = 1;
+	
+	public static final int FORMAT_STRING = 234, FORMAT_DOUBLE = 235, FORMAT_FLOAT = 236, FORMAT_INTEGER = 237, FORMAT_LONG = 238, FORMAT_SHORT = 239, FORMAT_BYTE = 240, FORMAT_CHAR = 241, FORMAT_BOOL = 242;
 	
 	///**
 	// * @param title The Title to be used for the console window.
@@ -52,7 +48,7 @@ public class Console
 	{
 		System.out.println("Console " + version.getVersion());
 		System.out.println("Created by Zachary Ehret");
-		System.out.println("2017-2018");
+		System.out.println("2017-2019");
 		System.out.println("According to configuration, commands should not contain or be \""+ ConsoleProperties.ILLEGAL_COMMAND_PREFIX + "\"");
 		new PL();
 		String consoleTitle = ConsoleProperties.CONSOLE_TITLE;
@@ -149,7 +145,39 @@ public class Console
 		return null;
 	}
 	
-	
+	public static String promptVerifiedInput(ConsolePrintData promptMessage, ConsolePrintData invalidInputMessage, int formatType, int inputOption) {
+		
+		while(true) {
+			try {
+				String prompt = prompt(promptMessage.getPrintMessage(), inputOption, promptMessage.getPrefix(), promptMessage.getAlertStatus());
+				
+				if(formatType == FORMAT_STRING) {
+					return prompt;
+				} else if (formatType == FORMAT_DOUBLE) {
+					return ""+Double.parseDouble(prompt);
+				} else if (formatType == FORMAT_FLOAT) {
+					return ""+Float.parseFloat(prompt);
+				} else if (formatType == FORMAT_INTEGER) {
+					return ""+Integer.parseInt(prompt);
+				} else if (formatType == FORMAT_LONG) {
+					return ""+Long.parseLong(prompt);
+				} else if (formatType == FORMAT_SHORT) {
+					return ""+Short.parseShort(prompt);
+				} else if (formatType == FORMAT_BYTE) {
+					return ""+Byte.parseByte(prompt);
+				} else if (formatType == FORMAT_CHAR) {
+					return ""+prompt.charAt(0);
+				} else if (formatType == FORMAT_BOOL) {
+					return ""+Boolean.parseBoolean(prompt);
+				} else {
+					throw new IllegalArgumentException("Illegal format type. Allowable types are Console.FORMAT_STRING, Console.FORMAT_DOUBLE, Console.FORMAT_FLOAT, Console.FORMAT_INTEGER, Console.FORMAT_LONG, Console.FORMAT_SHORT, Console.FORMAT_BYTE, Console.FORMAT_CHAR, and Console.FORMAT_BOOL.");
+				}
+			}catch(NumberFormatException e) {
+				PL.con(invalidInputMessage);
+			}
+		}
+	}
+
 	public static String prompt(String prompt,int inputOption) {
 		return prompt(prompt,inputOption, PL.INFO, false);
 	}
@@ -176,8 +204,7 @@ public class Console
 		String cmdInput = "";//used to detect a change in the input
 		consoleWindow.validate();
 		consoleWindow.forceVerticalScroll();
-		for(;;)
-		{
+		while(true) {
 			String commandLineInput = "" + consoleWindow.getCommandLineText();
 			
 			if(inputOption == Console.SHOWINPUTOPTION)
@@ -193,7 +220,6 @@ public class Console
 				} 
 				commandLineInput = sb.toString(); 
 			}
-			
 			
 			if(System.currentTimeMillis() % 5 == 0)
 			{
@@ -248,7 +274,7 @@ public class Console
 		
 		if(inputOption == Console.SHOWINPUTOPTION)
 		{
-			consoleWindow.setLastOutputFieldText(prePomptOutputWithoutPrompt+ prompt +" >> " + lastCommandEntry);
+			consoleWindow.setLastOutputFieldText(prePomptOutputWithPrompt + " >> " + lastCommandEntry);
 		}
 		else if(inputOption == Console.CENSORINPUTOPTION)
 		{
@@ -257,7 +283,7 @@ public class Console
 			for(int i = 0; i < len; i++){
 			    sb.append(ConsoleProperties.PROMPT_INPUT_CENSOR);
 			}
-			consoleWindow.setLastOutputFieldText(prePomptOutputWithoutPrompt+ prompt +" >> " + sb.toString());
+			consoleWindow.setLastOutputFieldText(prePomptOutputWithoutPrompt + " " + prompt +" >> " + sb.toString());
 		}
 		else if(inputOption == Console.HIDEINPUTOPTION)
 		{
@@ -265,7 +291,7 @@ public class Console
 		}
 		else
 		{
-			consoleWindow.setLastOutputFieldText(prePomptOutputWithoutPrompt);
+			consoleWindow.setLastOutputFieldText("* INVALID INPUT OPTION *");
 		}
 		prompting=false;
 		String cmd = lastCommandEntry;
@@ -399,6 +425,21 @@ public class Console
 			return true;
 		}catch(Exception e) {
 			return false;
+		}
+	}
+	
+	/**
+	 * Pauses the program by first calling Thread.sleep and if that fails then looping until the desired time has elapsed.
+	 * @param time milliseconds
+	 */
+	public static void pause(long time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			long start = System.currentTimeMillis();
+			while(System.currentTimeMillis() - start <= time) {
+				
+			}
 		}
 	}
 }
