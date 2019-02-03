@@ -21,8 +21,6 @@ public class Console
 	
 	public static NewConsoleWindow consoleWindow;
 	
-	public static Version version = new Version(new DateVersionFormat("A16.2018.12.24-20:34:26"));
-	
 	private static ProcessingPopup processing;
 	
 	public static EventHandler eventHandler;
@@ -46,12 +44,11 @@ public class Console
 	 */
 	public Console()
 	{
-		System.out.println("Console " + version.getVersion());
+		System.out.println("Console " + ConsoleProperties.version.getVersion());
 		System.out.println("Created by Zachary Ehret");
 		System.out.println("2017-2019");
 		System.out.println("According to configuration, commands should not contain or be \""+ ConsoleProperties.ILLEGAL_COMMAND_PREFIX + "\"");
 		new PL();
-		String consoleTitle = ConsoleProperties.CONSOLE_TITLE;
 		
 		if((ConsoleProperties.PROMPTING_CONSOLE)&&(!ConsoleProperties.SHOW_CMD_LINE))
 			PL.con(ConsoleProperties.MESSAGE$CONFLICT_CFG_PROMPTING_CMDLINE);

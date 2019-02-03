@@ -17,7 +17,7 @@ public enum Errors
 	 * 10000 - 99999 Let's never reach this okay?
 	 */
 	
-	//0  ------------------------------------ Everything is okay?
+	//0  ------------------------------------ Everything is okay more or less?
 	
 	EXPECTED_EXECUTION("0x0","EXPECTED_EXECUTION","The operation executed as expected."),
 	EXPECTED_SUCCESS("0x1","EXPECTED_SUCCESS","The operation executed successfully as expected"),

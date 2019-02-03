@@ -31,7 +31,7 @@ public class PL
 
 	public static final int INFO = 0, WARN = 1, SEVERE = 2, FATAL = 3, DEBUG = 4, PRIORITY_INFO = 5;
 	public static final int INFOC = 6, WARNC = 7, SEVEREC = 8, FATALC = 9, DEBUGC = 10, PRIORITY_INFOC = 11 , NONEC = 12, NONE = 13;
-	public static final String[] prefixes = {"[INFO]","[WARN]","[SEVR]","[FATAL]","[DEBUG]","[+INFO+]","[INFO]","[WARN]","[SEVR]","[FATAL]","[DEBUG]","[+INFO+]","",""};
+	public static final String[] prefixes = {"[INFO]","[WARN]","[SEVR]","[FATL]","[DEBUG]","[+INFO+]","[INFO]","[WARN]","[SEVR]","[FATL]","[DEBUG]","[+INFO+]","",""};
 	public static final boolean ALERT = true, NO_ALERT = false;
 	
 	
@@ -188,7 +188,7 @@ public class PL
 				pref = " " + prefixes[PRE] + " ";
 			}
 		}catch(Exception e) {
-			pref = "[?]";
+			pref = " [<??>] ";
 		}
 		finally {
 			msg = resolveDateTimeFormat() + pref + msg;
@@ -261,24 +261,25 @@ public class PL
 			return false;
 		}
 	}
-
 	private static String resolveDateTimeFormat() {
-		String dateTime = "";
+		return resolveDateTimeFormat(ConsoleProperties.DATE_TIME_PREFIX);
+	}
+
+	public static String resolveDateTimeFormat(String dateTimeFormat) {
+		
 		if(ConsoleProperties.DATE_TIME_PREFIX.equals(ConsoleProperties.FULL_DATE_TIME))
 			return new Date().toString();
-
 		Calendar c = new GregorianCalendar();
-		dateTime = (ConsoleProperties.DATE_TIME_PREFIX);
-		dateTime = dateTime.replaceAll(ConsoleProperties.YEAR_CODE, "" + c.get(Calendar.YEAR));
-		dateTime = dateTime.replaceAll(ConsoleProperties.MONTH_CODE, String.format("%02d", (c.get(Calendar.MONTH)+1)));
-		dateTime = dateTime.replaceAll(ConsoleProperties.DATE_CODE, String.format("%02d", (c.get(Calendar.DAY_OF_MONTH))));
-		dateTime = dateTime.replaceAll(ConsoleProperties.HOUR_CODE, String.format("%02d", (c.get(Calendar.HOUR_OF_DAY))));
-		dateTime = dateTime.replaceAll(ConsoleProperties.MINUTE_CODE, String.format("%02d", (c.get(Calendar.MINUTE))));
-		dateTime = dateTime.replaceAll(ConsoleProperties.SECONDS_CODE, String.format("%02d", (c.get(Calendar.SECOND))));
-		dateTime = dateTime.replaceAll(ConsoleProperties.MILLISECONDS_CODE, String.format("%04d", (c.get(Calendar.MILLISECOND))));
-		dateTime = dateTime.replaceAll(ConsoleProperties.EPOCH_CODE, ""+System.currentTimeMillis());
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.YEAR_CODE, "" + c.get(Calendar.YEAR));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.MONTH_CODE, String.format("%02d", (c.get(Calendar.MONTH)+1)));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.DATE_CODE, String.format("%02d", (c.get(Calendar.DAY_OF_MONTH))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.HOUR_CODE, String.format("%02d", (c.get(Calendar.HOUR_OF_DAY))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.MINUTE_CODE, String.format("%02d", (c.get(Calendar.MINUTE))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.SECONDS_CODE, String.format("%02d", (c.get(Calendar.SECOND))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.MILLISECONDS_CODE, String.format("%04d", (c.get(Calendar.MILLISECOND))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.EPOCH_CODE, ""+System.currentTimeMillis());
 		
-		return dateTime;
+		return dateTimeFormat;
 	}
 
 
@@ -342,7 +343,7 @@ public class PL
 			
 			String report = con_encap(description, '*', severity, alert);
 			String[] stack = getThreadStackTrace(t);
-			for(int n = 2; n < stack.length; n++) {
+			for(int n = 3; n < stack.length; n++) {
 				report += con(stack[n], severity, PL.NO_ALERT);
 			}
 			report += con_encap(description, '*', severity, alert);

@@ -12,6 +12,8 @@ import javax.swing.border.Border;
 import org.zehret.console.Console;
 import org.zehret.console.data.CommandHandler;
 import org.zehret.console.data.error.Errors;
+import org.zehret.console.data.version.DateVersionFormat;
+import org.zehret.console.data.version.Version;
 
 public class ConsoleProperties {
 	
@@ -24,7 +26,7 @@ public class ConsoleProperties {
 	/**
 	 * Use with any string to set the title of the console window.
 	 */
-	public static String CONSOLE_TITLE = "[No Title]";
+	public static String CONSOLE_TITLE = "?";
 	
 	/**
 	 * Hide the console version in the title. Default false
@@ -143,6 +145,9 @@ public class ConsoleProperties {
 	public static final String YYYYMMDD = new String(YEAR_CODE + STANDARD_DATE_DELIMINATOR + MONTH_CODE + STANDARD_DATE_DELIMINATOR + DATE_CODE);
 	public static final String FULL_DATE_TIME = new String("fdt");
 	
+	
+	public static final Version version = new Version(new DateVersionFormat("A16-2.2019.01.31-17:57:10"));
+	
 	/** 
 	 * CUSTOM FORMATS MAY BE USED BUT MUST FOLLOW STRICT FORMATS. ALL CHARACTERS ARE LEGAL AND ONLY THE FOLLOWING WILL BE REPLACED::
 	 * 
@@ -215,7 +220,7 @@ public class ConsoleProperties {
 	 * This print uses the custom color setting set in PL; Uses PL.INFOC
 	 */
 	public static void PRINT_CONFIGURATION(boolean inConsole) {
-		printcfg("CONSOLE " + Console.version.getVersion() + " CONFIGURATION", new Date().toString(),inConsole);
+		printcfg("CONSOLE " + version.getVersion() + " CONFIGURATION", new Date().toString(),inConsole);
 		printcfg("PROMPTING_CONSOLE",""+PROMPTING_CONSOLE,inConsole);
 		printcfg("SHOW_CONSOLE",""+SHOW_CONSOLE,inConsole);
 		printcfg("SHOW_CMD_LINE",""+SHOW_CMD_LINE,inConsole);

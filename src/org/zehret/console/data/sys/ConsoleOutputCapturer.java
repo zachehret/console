@@ -10,6 +10,7 @@ import java.util.List;
  * @author Manasjyoti Sharma, Bilesh Ganguly
  * https://stackoverflow.com/a/30665299/6580858
  */
+@Deprecated
 public class ConsoleOutputCapturer {
     private ByteArrayOutputStream baos;
     private PrintStream previous;

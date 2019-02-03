@@ -17,15 +17,18 @@ public class TestClass
 		System.out.println("** This test program will utilize all parts of the console to test their basic use. **");
 		System.out.println("**************************************************************************************");
 		
-		ConsoleProperties.SHOW_CMD_LINE = true;
+	/*	ConsoleProperties.SHOW_CMD_LINE = true;
 		ConsoleProperties.PROMPTING_CONSOLE = true;
 		ConsoleProperties.CONSOLE_FONT = new Font("Consolas", Font.PLAIN, 14);
 		ConsoleProperties.DATE_TIME_PREFIX = ConsoleProperties.YYYYMMDD_HHMMSSms;
 		ConsoleProperties.SHOW_ENTRY_IDENTIFIER = false;
 		ConsoleProperties.FATAL_BACKGROUND_COLOR = Color.YELLOW;
-		ConsoleProperties.CONSOLE_TITLE = "Test Program";
-		ConsoleProperties.HIDE_VERSION = true;
-		ConsoleProperties.FULLSCREEN_MODE = false;
+		//ConsoleProperties.CONSOLE_TITLE = "Test Program";
+		//ConsoleProperties.HIDE_VERSION = true;
+		ConsoleProperties.FULLSCREEN_MODE = false;.
+		
+		*/
+		ConsoleProperties.CONSOLE_FONT = new Font("Courier New", Font.PLAIN, 16);
 		new Console();
 		
 		new PL(); 

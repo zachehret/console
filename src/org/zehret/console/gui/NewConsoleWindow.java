@@ -115,7 +115,7 @@ public class NewConsoleWindow extends JFrame
 		startTime = System.currentTimeMillis();
 		String title = ConsoleProperties.CONSOLE_TITLE;
 		if(!ConsoleProperties.HIDE_VERSION)
-			title += " [Console ("+Console.version.getVersion()+")]";
+			title += " [Console ("+ConsoleProperties.version.getVersion()+")]";
 		setTitle(title);
 		try {
 			this.setIconImage(ConsoleProperties.CONSOLE_ICON);

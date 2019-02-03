@@ -3,6 +3,7 @@ package org.zehret.console.data.ccl.cmd;
 import org.zehret.console.Console;
 import org.zehret.console.data.Command;
 import org.zehret.console.data.error.Errors;
+import org.zehret.console.util.ConsoleProperties;
 import org.zehret.console.util.PL;
 
 public class INT_CMD_05 extends Command {
@@ -15,7 +16,7 @@ public class INT_CMD_05 extends Command {
 	@Override
 	public void process(String postPrefixArgs) throws Exception 
 	{
-		PL.con("Version #: " + Console.version.getVersion(),PL.INFO);
+		PL.con("Version #: " + ConsoleProperties.version.getVersion(),PL.INFO);
 		PL.con("----------------------------------------------------------------------------------------------------------------");
 		for(int n = 0; n < Errors.values().length; n++)
 		{
