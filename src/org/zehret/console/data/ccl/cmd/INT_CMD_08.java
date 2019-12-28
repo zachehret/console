@@ -1,7 +1,7 @@
 package org.zehret.console.data.ccl.cmd;
 
 import org.zehret.console.data.Command;
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.util.ConsoleConfiguration;
 
 public class INT_CMD_08 extends Command {
 
@@ -11,7 +11,7 @@ public class INT_CMD_08 extends Command {
 
 	@Override
 	public void process(String postPrefixArgs) throws Exception {
-		ConsoleProperties.PRINT_CONFIGURATION(true);
+		ConsoleConfiguration.PRINT_CONFIGURATION(true);
 	}
 
 }

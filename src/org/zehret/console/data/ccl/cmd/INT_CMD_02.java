@@ -6,7 +6,7 @@ import java.awt.Font;
 import org.zehret.console.Console;
 import org.zehret.console.data.Command;
 import org.zehret.console.data.error.Errors;
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.util.ConsoleConfiguration;
 import org.zehret.console.util.FontSet;
 import org.zehret.console.util.PL;
 
@@ -28,9 +28,9 @@ public class INT_CMD_02 extends Command
 			
 			try
 			{
-				ConsoleProperties.TEXT_COLOR = Color.decode(args[0]);
-				ConsoleProperties.BACKGROUND_COLOR = Color.decode(args[1]);
-				ConsoleProperties.CONSOLE_FONT = new Font(args[2].replaceAll("_"," "), Font.PLAIN, Integer.parseInt(args[3]));
+				ConsoleConfiguration.TEXT_COLOR = Color.decode(args[0]);
+				ConsoleConfiguration.BACKGROUND_COLOR = Color.decode(args[1]);
+				ConsoleConfiguration.CONSOLE_FONT = new Font(args[2].replaceAll("_"," "), Font.PLAIN, Integer.parseInt(args[3]));
 				//Console.consoleFontSet = new FontSet(Color.decode(args[0]),Color.decode(args[1]),new Font(args[2].replaceAll("_", " "),style,Integer.parseInt(args[3])));
 			}catch(Exception e)
 			{

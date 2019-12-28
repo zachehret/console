@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import org.zehret.console.Console;
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.util.ConsoleConfiguration;
 
 import java.awt.GridBagLayout;
 import javax.swing.JProgressBar;
@@ -69,7 +69,7 @@ public class ProcessingPopup extends JDialog
 		contentPane.setLayout(gbl_contentPane);
 		
 		progressBar = new JProgressBar();
-		progressBar.setStringPainted(ConsoleProperties.PAINT_PROGRESS_PERCENTAGE);
+		progressBar.setStringPainted(ConsoleConfiguration.PAINT_PROGRESS_PERCENTAGE);
 		progressBar.setForeground(new Color(50, 205, 50));
 		progressBar.setIndeterminate(true);
 		GridBagConstraints gbc_progressBar = new GridBagConstraints();

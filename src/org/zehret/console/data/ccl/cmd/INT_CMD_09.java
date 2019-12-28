@@ -2,7 +2,7 @@ package org.zehret.console.data.ccl.cmd;
 
 import org.zehret.console.Console;
 import org.zehret.console.data.Command;
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.util.ConsoleConfiguration;
 
 public class INT_CMD_09 extends Command {
 
@@ -12,8 +12,8 @@ public class INT_CMD_09 extends Command {
 
 	@Override
 	public void process(String postPrefixArgs) throws Exception {
-		ConsoleProperties.ENTRY_LINEWRAP = !ConsoleProperties.ENTRY_LINEWRAP;
-		Console.consoleWindow.setWordWrap(ConsoleProperties.ENTRY_LINEWRAP);
+		ConsoleConfiguration.ENTRY_LINEWRAP = !ConsoleConfiguration.ENTRY_LINEWRAP;
+		Console.consoleWindow.setWordWrap(ConsoleConfiguration.ENTRY_LINEWRAP);
 	}
 
 }

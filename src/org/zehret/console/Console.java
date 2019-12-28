@@ -8,12 +8,12 @@ import org.zehret.console.data.version.DateVersionFormat;
 import org.zehret.console.data.version.Version;
 import org.zehret.console.gui.NewConsoleWindow;
 import org.zehret.console.gui.ProcessingPopup;
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.util.ConsoleConfiguration;
 import org.zehret.console.util.PL;
 
 public class Console
 {
-	protected static String lastCommandEntry = ConsoleProperties.ILLEGAL_COMMAND_PREFIX;
+	protected static String lastCommandEntry = ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX;
 	
 	public static CommandHandler cmdHandler = null;
 	
@@ -32,30 +32,24 @@ public class Console
 	
 	public static final int FORMAT_STRING = 234, FORMAT_DOUBLE = 235, FORMAT_FLOAT = 236, FORMAT_INTEGER = 237, FORMAT_LONG = 238, FORMAT_SHORT = 239, FORMAT_BYTE = 240, FORMAT_CHAR = 241, FORMAT_BOOL = 242;
 	
-	///**
-	// * @param title The Title to be used for the console window.
-	 //* @param cmd Command handler, if equal to null and showCommands = true, will throw illegal argument
-	 //* @param showConsole Show the console at all? Useful for only logging.. True/false
-	 //* @param showCommands Show the command line? True/false 
-	 //* @param plr Program Log Prefix; Specifies the letter that is used in the first character of the log file name. '<char>'
-	 //*/
+
 	/**
 	 * Setup ConsoleProperties prior to calling this constructor.
 	 */
 	public Console()
 	{
-		System.out.println("Console " + ConsoleProperties.version.getVersion());
+		System.out.println("Console " + ConsoleConfiguration.version.getVersion());
 		System.out.println("Created by Zachary Ehret");
 		System.out.println("2017-2019");
-		System.out.println("According to configuration, commands should not contain or be \""+ ConsoleProperties.ILLEGAL_COMMAND_PREFIX + "\"");
+		System.out.println("According to configuration, commands should not contain or be \""+ ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX + "\"");
 		new PL();
 		
-		if((ConsoleProperties.PROMPTING_CONSOLE)&&(!ConsoleProperties.SHOW_CMD_LINE))
-			PL.con(ConsoleProperties.MESSAGE$CONFLICT_CFG_PROMPTING_CMDLINE);
-		if((!ConsoleProperties.SHOW_CONSOLE)&&(ConsoleProperties.SHOW_CMD_LINE))
-			PL.con(ConsoleProperties.MESSAGE$CONFLICT_CFG_SHOWCONSOLE_CMDLINE);
+		if((ConsoleConfiguration.PROMPTING_CONSOLE)&&(!ConsoleConfiguration.SHOW_CMD_LINE))
+			PL.con(ConsoleConfiguration.MESSAGE$CONFLICT_CFG_PROMPTING_CMDLINE);
+		if((!ConsoleConfiguration.SHOW_CONSOLE)&&(ConsoleConfiguration.SHOW_CMD_LINE))
+			PL.con(ConsoleConfiguration.MESSAGE$CONFLICT_CFG_SHOWCONSOLE_CMDLINE);
 		
-		cmdHandler = ConsoleProperties.COMMAND_HANDLER;
+		cmdHandler = ConsoleConfiguration.COMMAND_HANDLER;
 		try {
 			cmdHandler.checkIntegrity();
 		}catch(Exception e)
@@ -63,25 +57,25 @@ public class Console
 			PL.con(Errors.INVALID_CMD_HANDLER.getMessage());
 		}
 		init();
-		ConsoleProperties.PRINT_CONFIGURATION(false);
+		ConsoleConfiguration.PRINT_CONFIGURATION(false);
 	}
 	
 	private static void init()
 	{
 		consoleWindow = new NewConsoleWindow();
 		//consoleWindow.setUndecorated(ConsoleProperties.FULLSCREEN_MODE);
-		consoleWindow.setVisible(ConsoleProperties.SHOW_CONSOLE);
+		consoleWindow.setVisible(ConsoleConfiguration.SHOW_CONSOLE);
 		consoleWindow.updateFullscreen();
-		if(ConsoleProperties.AUTOSTART_EVENT_HANDLER)
+		if(ConsoleConfiguration.AUTOSTART_EVENT_HANDLER)
 			new Thread(eventHandler = new EventHandler()).start();
 		//new Thread(new SysOutCapture()).start();
 	}
 	
 	public static boolean toggleConsole()
 	{
-		ConsoleProperties.SHOW_CONSOLE = !ConsoleProperties.SHOW_CONSOLE;
-		consoleWindow.setVisible(ConsoleProperties.SHOW_CONSOLE);
-		return ConsoleProperties.SHOW_CONSOLE;
+		ConsoleConfiguration.SHOW_CONSOLE = !ConsoleConfiguration.SHOW_CONSOLE;
+		consoleWindow.setVisible(ConsoleConfiguration.SHOW_CONSOLE);
+		return ConsoleConfiguration.SHOW_CONSOLE;
 	}
 
 	public static void setConsoleCommandEntry(String s)
@@ -110,7 +104,7 @@ public class Console
 	public static String getAndResetLastCommandEntry()
 	{
 		String s = new String(lastCommandEntry);
-		lastCommandEntry = ConsoleProperties.ILLEGAL_COMMAND_PREFIX;
+		lastCommandEntry = ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX;
 		return s;
 	}
 	
@@ -120,7 +114,7 @@ public class Console
 	 */
 	public static boolean newCommand()
 	{
-		return !lastCommandEntry.equalsIgnoreCase(ConsoleProperties.ILLEGAL_COMMAND_PREFIX);
+		return !lastCommandEntry.equalsIgnoreCase(ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX);
 	}
 	
 	public static void showCommandLine()
@@ -186,12 +180,12 @@ public class Console
 	 */
 	public static String prompt(String prompt,int inputOption, int prefix, boolean alert)
 	{
-		if(!ConsoleProperties.PROMPTING_CONSOLE) {
+		if(!ConsoleConfiguration.PROMPTING_CONSOLE) {
 			PL.con_encap("Console must be defined as a prompting application.", '*',PL.FATAL,true);
 			
 			return "* invalid setup *";
 		}
-		lastCommandEntry = ConsoleProperties.ILLEGAL_COMMAND_PREFIX;
+		lastCommandEntry = ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX;
 		PL.con(prompt,prefix,alert);
 		String prePomptOutputWithoutPrompt = consoleWindow.getLastOutputFieldText().replaceAll(prompt, "");
 		String prePomptOutputWithPrompt = consoleWindow.getLastOutputFieldText();
@@ -213,7 +207,7 @@ public class Console
 				int len = commandLineInput.length();
 				StringBuilder sb = new StringBuilder(len);
 				for(int i = 0; i < len; i++){
-				    sb.append(ConsoleProperties.PROMPT_INPUT_CENSOR);
+				    sb.append(ConsoleConfiguration.PROMPT_INPUT_CENSOR);
 				} 
 				commandLineInput = sb.toString(); 
 			}
@@ -221,7 +215,7 @@ public class Console
 			if(System.currentTimeMillis() % 5 == 0)
 			{
 				prompting=true;
-				if(!lastCommandEntry.equalsIgnoreCase(ConsoleProperties.ILLEGAL_COMMAND_PREFIX)) break;
+				if(!lastCommandEntry.equalsIgnoreCase(ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX)) break;
 			}
 				
 			if((System.currentTimeMillis() - lastDotTime == 500)&&(!stage0))
@@ -278,7 +272,7 @@ public class Console
 			int len = lastCommandEntry.length();
 			StringBuilder sb = new StringBuilder(len);
 			for(int i = 0; i < len; i++){
-			    sb.append(ConsoleProperties.PROMPT_INPUT_CENSOR);
+			    sb.append(ConsoleConfiguration.PROMPT_INPUT_CENSOR);
 			}
 			consoleWindow.setLastOutputFieldText(prePomptOutputWithoutPrompt + " " + prompt +" >> " + sb.toString());
 		}
@@ -292,7 +286,7 @@ public class Console
 		}
 		prompting=false;
 		String cmd = lastCommandEntry;
-		lastCommandEntry = ConsoleProperties.ILLEGAL_COMMAND_PREFIX;
+		lastCommandEntry = ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX;
 		return cmd;
 	}
 	

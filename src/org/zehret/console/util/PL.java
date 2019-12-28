@@ -60,18 +60,18 @@ public class PL
 	 * Prints to the console window ONLY. Encapsulates the msg with a chosen character in a message format.
 	 */
 	public static String con_encap(String msg, char e, int severity, boolean alert) {
-		boolean temp = ConsoleProperties.AUTO_RESET_CUSTOM_COLOR;
+		boolean temp = ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR;
 		String top_bottom = "";
 		for(int n = 0; n < msg.length() + 4; n++) {
 			top_bottom+=e;
 		}
-		ConsoleProperties.AUTO_RESET_CUSTOM_COLOR = false;
+		ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR = false;
 						con(top_bottom,severity,alert);
 		String msgprint = con(e + " " + msg + " " + e,severity,alert);
 						con(top_bottom,severity,alert);
-		ConsoleProperties.AUTO_RESET_CUSTOM_COLOR = temp;
-		if(ConsoleProperties.AUTO_RESET_CUSTOM_COLOR)
-			ConsoleProperties.resetCustomColors();
+		ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR = temp;
+		if(ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR)
+			ConsoleConfiguration.resetCustomColors();
 		return msgprint;
 	}
 	
@@ -158,7 +158,7 @@ public class PL
 	public static void ExOUT(String msg,int severity)
 	{
 		System.out.println("Please note this is not completed yet. PL.ExOut");
-		OUT(msg,severity,true,true,true,"/logs/console/out/"+PL.getFileNameAndExtInFormat(ConsoleProperties.LOG_CHARACTER_PREFIX));
+		OUT(msg,severity,true,true,true,"/logs/console/out/"+PL.getFileNameAndExtInFormat(ConsoleConfiguration.LOG_CHARACTER_PREFIX));
 	}
 	
 	
@@ -197,26 +197,26 @@ public class PL
 			try {
 				msg.replaceAll(System.lineSeparator(), "\n\t");
 				if(PRE == PL.INFO)
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.TEXT_COLOR, ConsoleProperties.BACKGROUND_COLOR);
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.TEXT_COLOR, ConsoleConfiguration.BACKGROUND_COLOR);
 				else if(PRE == PL.WARN)
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.WARN_MSG_COLOR, ConsoleProperties.WARN_BACKGROUND_COLOR);
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.WARN_MSG_COLOR, ConsoleConfiguration.WARN_BACKGROUND_COLOR);
 				else if(PRE == PL.SEVERE)
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.SEVERE_MSG_COLOR, ConsoleProperties.SEVERE_BACKGROUND_COLOR);
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.SEVERE_MSG_COLOR, ConsoleConfiguration.SEVERE_BACKGROUND_COLOR);
 				else if(PRE == PL.DEBUG)
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.DEBUG_MSG_COLOR, ConsoleProperties.DEBUG_BACKGROUND_COLOR);
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.DEBUG_MSG_COLOR, ConsoleConfiguration.DEBUG_BACKGROUND_COLOR);
 				else if(PRE == PL.FATAL)
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.FATAL_MSG_COLOR, ConsoleProperties.FATAL_BACKGROUND_COLOR);
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.FATAL_MSG_COLOR, ConsoleConfiguration.FATAL_BACKGROUND_COLOR);
 				else if(PRE == PL.PRIORITY_INFO)
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.PRIORITY_INFO_MSG_COLOR, ConsoleProperties.PRIORITY_INFO_BACKGROUND_COLOR);
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.PRIORITY_INFO_MSG_COLOR, ConsoleConfiguration.PRIORITY_INFO_BACKGROUND_COLOR);
 				else if((PRE >= PL.INFOC)&&(PRE <= PL.NONEC)) {
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.MSG_CUSTOM_COLOR, ConsoleProperties.BACKGROUND_CUSTOM_COLOR);
-					if(ConsoleProperties.AUTO_RESET_CUSTOM_COLOR) {
-						ConsoleProperties.MSG_CUSTOM_COLOR = ConsoleProperties.TEXT_COLOR;
-						ConsoleProperties.BACKGROUND_CUSTOM_COLOR = ConsoleProperties.BACKGROUND_COLOR;
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.MSG_CUSTOM_COLOR, ConsoleConfiguration.BACKGROUND_CUSTOM_COLOR);
+					if(ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR) {
+						ConsoleConfiguration.MSG_CUSTOM_COLOR = ConsoleConfiguration.TEXT_COLOR;
+						ConsoleConfiguration.BACKGROUND_CUSTOM_COLOR = ConsoleConfiguration.BACKGROUND_COLOR;
 					}
 				}
 				else
-					Console.consoleWindow.insertOutput(msg, ConsoleProperties.TEXT_COLOR, ConsoleProperties.BACKGROUND_COLOR);
+					Console.consoleWindow.insertOutput(msg, ConsoleConfiguration.TEXT_COLOR, ConsoleConfiguration.BACKGROUND_COLOR);
 			}catch(Exception e)
 			{
 				msg.replaceAll("\n","");
@@ -262,22 +262,22 @@ public class PL
 		}
 	}
 	private static String resolveDateTimeFormat() {
-		return resolveDateTimeFormat(ConsoleProperties.DATE_TIME_PREFIX);
+		return resolveDateTimeFormat(ConsoleConfiguration.DATE_TIME_PREFIX);
 	}
 
 	public static String resolveDateTimeFormat(String dateTimeFormat) {
 		
-		if(ConsoleProperties.DATE_TIME_PREFIX.equals(ConsoleProperties.FULL_DATE_TIME))
+		if(ConsoleConfiguration.DATE_TIME_PREFIX.equals(ConsoleConfiguration.FULL_DATE_TIME))
 			return new Date().toString();
 		Calendar c = new GregorianCalendar();
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.YEAR_CODE, "" + c.get(Calendar.YEAR));
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.MONTH_CODE, String.format("%02d", (c.get(Calendar.MONTH)+1)));
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.DATE_CODE, String.format("%02d", (c.get(Calendar.DAY_OF_MONTH))));
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.HOUR_CODE, String.format("%02d", (c.get(Calendar.HOUR_OF_DAY))));
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.MINUTE_CODE, String.format("%02d", (c.get(Calendar.MINUTE))));
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.SECONDS_CODE, String.format("%02d", (c.get(Calendar.SECOND))));
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.MILLISECONDS_CODE, String.format("%04d", (c.get(Calendar.MILLISECOND))));
-		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleProperties.EPOCH_CODE, ""+System.currentTimeMillis());
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.YEAR_CODE, "" + c.get(Calendar.YEAR));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.MONTH_CODE, String.format("%02d", (c.get(Calendar.MONTH)+1)));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.DATE_CODE, String.format("%02d", (c.get(Calendar.DAY_OF_MONTH))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.HOUR_CODE, String.format("%02d", (c.get(Calendar.HOUR_OF_DAY))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.MINUTE_CODE, String.format("%02d", (c.get(Calendar.MINUTE))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.SECONDS_CODE, String.format("%02d", (c.get(Calendar.SECOND))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.MILLISECONDS_CODE, String.format("%04d", (c.get(Calendar.MILLISECOND))));
+		dateTimeFormat = dateTimeFormat.replaceAll(ConsoleConfiguration.EPOCH_CODE, ""+System.currentTimeMillis());
 		
 		return dateTimeFormat;
 	}
@@ -338,8 +338,8 @@ public class PL
 	
 	public static String conPrintThreadStackTrace(Thread t, String description, int severity, boolean alert) {
 		try {
-			boolean temp = ConsoleProperties.AUTO_RESET_CUSTOM_COLOR;
-			ConsoleProperties.AUTO_RESET_CUSTOM_COLOR = false;
+			boolean temp = ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR;
+			ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR = false;
 			
 			String report = con_encap(description, '*', severity, alert);
 			String[] stack = getThreadStackTrace(t);
@@ -347,15 +347,15 @@ public class PL
 				report += con(stack[n], severity, PL.NO_ALERT);
 			}
 			report += con_encap(description, '*', severity, alert);
-			ConsoleProperties.AUTO_RESET_CUSTOM_COLOR = temp;
+			ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR = temp;
 			return report;
 		} catch (Exception e) { return e.getMessage(); }
 	}
 
 	public static void con(ConsolePrintData cpd) {
 		if((cpd.getPrefix() > PRIORITY_INFO)&&(cpd.getPrefix() < NONE)) {
-			ConsoleProperties.BACKGROUND_CUSTOM_COLOR = cpd.getBackgroundColor();
-			ConsoleProperties.MSG_CUSTOM_COLOR = cpd.getTextColor();
+			ConsoleConfiguration.BACKGROUND_CUSTOM_COLOR = cpd.getBackgroundColor();
+			ConsoleConfiguration.MSG_CUSTOM_COLOR = cpd.getTextColor();
 		}
 		con(cpd.getPrintMessage(), cpd.getPrefix(), cpd.getAlertStatus());
 	}

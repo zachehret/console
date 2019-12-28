@@ -3,7 +3,7 @@ package org.zehret.console.gui;
 import org.zehret.console.Console;
 import org.zehret.console.data.ccl.ConsoleCommandLine;
 import org.zehret.console.data.error.Errors;
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.util.ConsoleConfiguration;
 import org.zehret.console.util.FontSet;
 import org.zehret.console.util.PL;
 
@@ -17,6 +17,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Event;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,6 +30,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -39,21 +41,24 @@ import javax.swing.border.EtchedBorder;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.EventQueue;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.SystemColor;
 
 public class NewConsoleWindow extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	JTextField textField;
+	protected JTextField commandTextField;
 	private JScrollPane scrollPane;
 	private JMenuBar menuBar;
 	private JMenu FileMenuButton;
@@ -106,19 +111,19 @@ public class NewConsoleWindow extends JFrame
 		addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent arg0) {
-				if(ConsoleProperties.FULLSCREEN_MODE) {
+				if(ConsoleConfiguration.FULLSCREEN_MODE) {
 					Console.consoleWindow.setLocation(0,0);
 				}
 			}
 		});
 		this.consoleCommandLine.setVisible(false);
 		startTime = System.currentTimeMillis();
-		String title = ConsoleProperties.CONSOLE_TITLE;
-		if(!ConsoleProperties.HIDE_VERSION)
-			title += " [Console ("+ConsoleProperties.version.getVersion()+")]";
+		String title = ConsoleConfiguration.CONSOLE_TITLE;
+		if(!ConsoleConfiguration.HIDE_VERSION)
+			title += " [Console ("+ConsoleConfiguration.version.getVersion()+")]";
 		setTitle(title);
 		try {
-			this.setIconImage(ConsoleProperties.CONSOLE_ICON);
+			this.setIconImage(ConsoleConfiguration.CONSOLE_ICON);
 		}catch(Exception e) {
 			PL.sys("Failed to set icon for console window. " + e.getMessage(), PL.WARN);
 		}
@@ -126,8 +131,11 @@ public class NewConsoleWindow extends JFrame
 		setBounds(100, 100, 776, 478);
 		
 		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
+		menuBar.setBackground(SystemColor.control);
+		if(ConsoleConfiguration.SHOW_TOOLBAR) {
+			setJMenuBar(menuBar);
+		}
+	
 		FileMenuButton = new JMenu("File");
 		FileMenuButton.setFont(new Font("Arial", Font.PLAIN, 12));
 		menuBar.add(FileMenuButton);
@@ -146,7 +154,7 @@ public class NewConsoleWindow extends JFrame
 				for(int n = 0; n < Console.consoleWindow.OUTPUT_ARCHIVE.size(); n++) {
 					out[n] = Console.consoleWindow.OUTPUT_ARCHIVE.get(n);
 				}
-				PL.createWriteNewFile("logs\\console\\output_archives\\"+PL.getFileNameAndExtInFormat(ConsoleProperties.LOG_CHARACTER_PREFIX),out);
+				PL.createWriteNewFile("logs\\console\\output_archives\\"+PL.getFileNameAndExtInFormat(ConsoleConfiguration.LOG_CHARACTER_PREFIX),out);
 			}
 		});
 		saveLogButton.add(mntmArchivedOutput);
@@ -155,7 +163,7 @@ public class NewConsoleWindow extends JFrame
 		mntmDisplayedOutput.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				PL.createWriteNewFile("logs\\console\\output\\"+PL.getFileNameAndExtInFormat(ConsoleProperties.LOG_CHARACTER_PREFIX),Console.consoleWindow.getOutputStringArray());
+				PL.createWriteNewFile("logs\\console\\output\\"+PL.getFileNameAndExtInFormat(ConsoleConfiguration.LOG_CHARACTER_PREFIX),Console.consoleWindow.getOutputStringArray());
 			}
 		});
 		saveLogButton.add(mntmDisplayedOutput);
@@ -166,7 +174,7 @@ public class NewConsoleWindow extends JFrame
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				PL.ExOUT(ConsoleProperties.MESSAGE$CONSOLE_TERMINATION_FROM_BUTTON,PL.WARN);
+				PL.ExOUT(ConsoleConfiguration.MESSAGE$CONSOLE_TERMINATION_FROM_BUTTON,PL.WARN);
 				System.exit(0);	
 			}
 		});
@@ -206,6 +214,7 @@ public class NewConsoleWindow extends JFrame
 		mnData.add(uptimeLbl);
 		
 		mnView = new JMenu("View");
+		mnView.setBackground(SystemColor.control);
 		mnView.setFont(new Font("Arial", Font.PLAIN, 12));
 		menuBar.add(mnView);
 		
@@ -261,6 +270,8 @@ public class NewConsoleWindow extends JFrame
 		mntmHide.setIcon(new ImageIcon(NewConsoleWindow.class.getResource("/org/zehret/console/gui/resources/hide.png")));
 		mntmHide.setFont(new Font("Arial", Font.PLAIN, 12));
 		mnView.add(mntmHide);
+		
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -270,7 +281,6 @@ public class NewConsoleWindow extends JFrame
 		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
-		
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -283,16 +293,16 @@ public class NewConsoleWindow extends JFrame
 		contentPane.add(scrollPane, gbc_scrollPane);
 	
 		textPanel = new JPanel();
-		textPanel.setBackground(ConsoleProperties.BACKGROUND_COLOR);
+		textPanel.setBackground(ConsoleConfiguration.BACKGROUND_COLOR);
 		scrollPane.setViewportView(textPanel);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 		
-		if(ConsoleProperties.SHOW_CMD_LINE) {
+		if(ConsoleConfiguration.SHOW_CMD_LINE) {
 			addCommandLine();
 		} else {}
 		
-		if(ConsoleProperties.FULLSCREEN_MODE) {
+		if(ConsoleConfiguration.FULLSCREEN_MODE) {
 			this.setUndecorated(true);
 			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			int width = gd.getDisplayMode().getWidth();														 			
@@ -320,7 +330,7 @@ public class NewConsoleWindow extends JFrame
 	@Deprecated
 	public void insertOutput(String text, int COLOR_CODE) {
 		String colorCode = "ffffff";
-		insertOutput("[deprecated]" + text,ConsoleProperties.TEXT_COLOR,ConsoleProperties.BACKGROUND_COLOR);
+		insertOutput("[deprecated]" + text,ConsoleConfiguration.TEXT_COLOR,ConsoleConfiguration.BACKGROUND_COLOR);
 	}
 	
 	/**
@@ -334,7 +344,7 @@ public class NewConsoleWindow extends JFrame
 	
 	public void updateFullscreen() {
 	//	this.setUndecorated(ConsoleProperties.FULLSCREEN_MODE);
-		if(ConsoleProperties.FULLSCREEN_MODE) {
+		if(ConsoleConfiguration.FULLSCREEN_MODE) {
 			//**************************************************************************************************
 			//https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java			   *
 			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(); // *
@@ -366,21 +376,54 @@ public class NewConsoleWindow extends JFrame
 		fieldID = fieldID.substring(fieldID.length()-12);
 		//Create the new Textfield
 		JTextArea newField = new JTextArea();
-		if(ConsoleProperties.SHOW_ENTRY_IDENTIFIER)
+		if(ConsoleConfiguration.SHOW_ENTRY_IDENTIFIER)
 			newField.setText("[" + fieldID + "] "+ text);
 		else
 			newField.setText(text);
 		newField.setForeground(textColor);
 		newField.setBackground(backgroundColor);
 		//newField.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		newField.setBorder(ConsoleProperties.OUTPUT_FIELD_BORDER);
-		newField.setFont(ConsoleProperties.CONSOLE_FONT);
+		newField.setBorder(ConsoleConfiguration.OUTPUT_FIELD_BORDER);
+		newField.setFont(ConsoleConfiguration.CONSOLE_FONT);
 		newField.setVisible(true);
 		newField.setEditable(false);
 		newField.setEnabled(true);
 		newField.setName(fieldID);
 		newField.setMaximumSize(new Dimension(Integer.MAX_VALUE,(int)newField.getPreferredSize().getHeight()));
-		newField.setLineWrap(ConsoleProperties.ENTRY_LINEWRAP);
+		newField.setLineWrap(ConsoleConfiguration.ENTRY_LINEWRAP);
+		newField.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+			
+		});
+		newField.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(!e.isControlDown()) {
+					Console.consoleWindow.appendTextToCMD(e.getKeyChar());
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
+			
+		});
 		
 		
 		this.lastOutputFieldName = fieldID;
@@ -390,14 +433,14 @@ public class NewConsoleWindow extends JFrame
 		
 		this.textPanel.add(newField, gbc_newField);
 	
-		if(System.currentTimeMillis() - lastUpdateTime > ConsoleProperties.GUI_UPDATE_DELAY) {
+		if(System.currentTimeMillis() - lastUpdateTime > ConsoleConfiguration.GUI_UPDATE_DELAY) {
 			this.validate();
 			lastUpdateTime = System.currentTimeMillis();
 		}
 
 		this.scrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
 		
-		if(this.textPanel.getComponentCount() > ConsoleProperties.MAX_ENTRY_LIMIT) {
+		if(this.textPanel.getComponentCount() > ConsoleConfiguration.MAX_ENTRY_LIMIT) {
 			this.textPanel.remove(0);
 		}
 	
@@ -405,6 +448,10 @@ public class NewConsoleWindow extends JFrame
 		updateGUI();
 	}
 	
+	protected void appendTextToCMD(char keyChar) {
+		this.commandTextField.setText(this.commandTextField.getText() + keyChar);
+	}
+
 	/**
 	 * Use this method to set the text of the last output field
 	 */
@@ -412,7 +459,7 @@ public class NewConsoleWindow extends JFrame
 		try {
 			this.findJTextAreaComponent(this.lastOutputFieldName).setText(text);
 		}catch(NullPointerException e) {
-			PL.con(ConsoleProperties.MESSAGE$FAIL_OVERRIDE_SET_LAST_OUTPUT + this.lastOutputFieldName,PL.SEVERE);
+			PL.con(ConsoleConfiguration.MESSAGE$FAIL_OVERRIDE_SET_LAST_OUTPUT + this.lastOutputFieldName,PL.SEVERE);
 			e.printStackTrace();
 		}
 	}
@@ -456,7 +503,7 @@ public class NewConsoleWindow extends JFrame
 		this.entriesCountLbl.setText("Line Entries: " + this.entries);
 		this.uptimeLbl.setText("Uptime: " + String.format("%02dM %02dS",TimeUnit.MILLISECONDS.toMinutes(timeElapsed), TimeUnit.MILLISECONDS.toSeconds(timeElapsed) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeElapsed))));
 		
-		if(ConsoleProperties.PROMPTING_CONSOLE)
+		if(ConsoleConfiguration.PROMPTING_CONSOLE)
 			this.mntmHide.setEnabled(false);
 		else
 			this.mntmHide.setEnabled(true);
@@ -525,11 +572,11 @@ public class NewConsoleWindow extends JFrame
 			{
 				if(sendCommandButton.isEnabled())
 				{
-					if(!Console.consoleWindow.textField.getText().trim().equals(""))
+					if(!Console.consoleWindow.commandTextField.getText().trim().equals(""))
 					{
-						Console.setLastCommandEntry(Console.consoleWindow.textField.getText());
-						Console.consoleWindow.textField.setText("");
-						Console.consoleWindow.textField.requestFocus();
+						Console.setLastCommandEntry(Console.consoleWindow.commandTextField.getText());
+						Console.consoleWindow.commandTextField.setText("");
+						Console.consoleWindow.commandTextField.requestFocus();
 						if(!Console.prompting)
 						{
 							try
@@ -537,7 +584,7 @@ public class NewConsoleWindow extends JFrame
 								Console.cmdHandler.processCommandSend(Console.getLastCommandEntry());
 							}catch(NullPointerException e)
 							{
-								if(!ConsoleProperties.PROMPTING_CONSOLE)
+								if(!ConsoleConfiguration.PROMPTING_CONSOLE)
 									PL.con(Errors.UNDECLARED_CMD_HANDLER.getMessage());
 							}catch(Exception e)
 							{
@@ -548,9 +595,9 @@ public class NewConsoleWindow extends JFrame
 					}
 					else
 					{
-						if(Console.getLastCommandEntry().equals(ConsoleProperties.ILLEGAL_COMMAND_PREFIX))
+						if(Console.getLastCommandEntry().equals(ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX))
 							return;
-						Console.consoleWindow.textField.setText(Console.getLastCommandEntry());
+						Console.consoleWindow.commandTextField.setText(Console.getLastCommandEntry());
 					}
 				}
 			}
@@ -558,21 +605,21 @@ public class NewConsoleWindow extends JFrame
 	
 		sendCommandButton.setToolTipText("Send command");
 		
-		textField = new JTextField();
-		textField.addKeyListener(new KeyAdapter()
+		commandTextField = new JTextField();
+		commandTextField.addKeyListener(new KeyAdapter()
 		{
 			@Override
 			public void keyPressed(KeyEvent ke) 
 			{
-				if(textField.isEnabled())
+				if(commandTextField.isEnabled())
 				{
 					if(ke.getKeyCode() == KeyEvent.VK_ENTER)
 					{
-						if(!Console.consoleWindow.textField.getText().trim().equals(""))
+						if(!Console.consoleWindow.commandTextField.getText().trim().equals(""))
 						{
-							Console.setLastCommandEntry(Console.consoleWindow.textField.getText());
-							Console.consoleWindow.textField.setText("");
-							Console.consoleWindow.textField.requestFocus();
+							Console.setLastCommandEntry(Console.consoleWindow.commandTextField.getText());
+							Console.consoleWindow.commandTextField.setText("");
+							Console.consoleWindow.commandTextField.requestFocus();
 							if(!Console.prompting)
 							{
 								try
@@ -580,7 +627,7 @@ public class NewConsoleWindow extends JFrame
 									Console.cmdHandler.processCommandSend(Console.getLastCommandEntry());
 								}catch(NullPointerException e)
 								{
-									if(!ConsoleProperties.PROMPTING_CONSOLE)
+									if(!ConsoleConfiguration.PROMPTING_CONSOLE)
 										PL.con(Errors.UNDECLARED_CMD_HANDLER.getMessage());
 								}catch(Exception e)
 								{
@@ -591,9 +638,9 @@ public class NewConsoleWindow extends JFrame
 						}
 						else
 						{
-							if(Console.getLastCommandEntry().equals(ConsoleProperties.ILLEGAL_COMMAND_PREFIX))
+							if(Console.getLastCommandEntry().equals(ConsoleConfiguration.ILLEGAL_COMMAND_PREFIX))
 								return;
-							Console.consoleWindow.textField.setText(Console.getLastCommandEntry());
+							Console.consoleWindow.commandTextField.setText(Console.getLastCommandEntry());
 						}
 					}
 				}
@@ -606,17 +653,17 @@ public class NewConsoleWindow extends JFrame
 		gbc_horizontalStrut.gridx = 0;
 		gbc_horizontalStrut.gridy = 1;
 		contentPane.add(horizontalStrut, gbc_horizontalStrut);
-		textField.setToolTipText("Command");
-		textField.setBackground(Color.white);
-		textField.setForeground(Color.black);
-		textField.setFont(new Font("Courier New", Font.PLAIN, 16));
+		commandTextField.setToolTipText("Command");
+		commandTextField.setBackground(Color.white);
+		commandTextField.setForeground(Color.black);
+		commandTextField.setFont(new Font("Courier New", Font.PLAIN, 16));
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 0, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 1;
-		contentPane.add(textField, gbc_textField);
-		textField.setColumns(10);
+		contentPane.add(commandTextField, gbc_textField);
+		commandTextField.setColumns(10);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton.gridx = 2;
@@ -637,9 +684,9 @@ public class NewConsoleWindow extends JFrame
 	{
 		try
 		{
-			this.textField.setEnabled(enabled);
+			this.commandTextField.setEnabled(enabled);
 			this.sendCommandButton.setEnabled(enabled);
-			return this.textField.isEnabled();
+			return this.commandTextField.isEnabled();
 		}catch(Exception e)
 		{
 			PL.con("Couldn't set command line to ->" + enabled);
@@ -660,13 +707,13 @@ public class NewConsoleWindow extends JFrame
 	{
 		for(int n = 0; n < output.length; n++)
 		{
-			this.insertOutput(output[n], ConsoleProperties.TEXT_COLOR,ConsoleProperties.BACKGROUND_COLOR);
+			this.insertOutput(output[n], ConsoleConfiguration.TEXT_COLOR,ConsoleConfiguration.BACKGROUND_COLOR);
 		}
 	}
 
 	public String getCommandLineText()
 	{
-		return this.textField.getText();
+		return this.commandTextField.getText();
 	}
 
 	public void setFontSet(FontSet consoleFontSet)
@@ -691,7 +738,7 @@ public class NewConsoleWindow extends JFrame
 			}
 			throw new IllegalArgumentException();
 		}catch(Exception e) {
-			PL.con(ConsoleProperties.MESSAGE$FAIL_FIND_ENTRY_BY_ID + this.lastOutputFieldName, PL.SEVERE);
+			PL.con(ConsoleConfiguration.MESSAGE$FAIL_FIND_ENTRY_BY_ID + this.lastOutputFieldName, PL.SEVERE);
 			e.printStackTrace();
 			return null;
 		}
@@ -707,7 +754,7 @@ public class NewConsoleWindow extends JFrame
 					}
 				}catch(Exception e) { e.printStackTrace();}
 			}
-		}catch(Exception e) { PL.con(ConsoleProperties.MESSAGE$FAIL_REMOVE_LAST_OUTPUT,PL.WARN); }
+		}catch(Exception e) { PL.con(ConsoleConfiguration.MESSAGE$FAIL_REMOVE_LAST_OUTPUT,PL.WARN); }
 	}
 
 	public void forceVerticalScroll() {

@@ -2,16 +2,16 @@ package org.zehret.console.gui;
 
 import java.awt.Color;
 
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.util.ConsoleConfiguration;
 import org.zehret.console.util.PL;
 
 public class ConsoleWindow {
 	public static void help() {
-		ConsoleProperties.AUTO_RESET_CUSTOM_COLOR = false;
-		ConsoleProperties.BACKGROUND_CUSTOM_COLOR = Color.gray;
-		ConsoleProperties.MSG_CUSTOM_COLOR = ConsoleProperties.WARN_MSG_COLOR;
+		ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR = false;
+		ConsoleConfiguration.BACKGROUND_CUSTOM_COLOR = Color.gray;
+		ConsoleConfiguration.MSG_CUSTOM_COLOR = ConsoleConfiguration.WARN_MSG_COLOR;
 		PL.con_encap("DO NOT USE", '*', PL.WARNC, PL.NO_ALERT);
-		ConsoleProperties.AUTO_RESET_CUSTOM_COLOR = false;
+		ConsoleConfiguration.AUTO_RESET_CUSTOM_COLOR = false;
 	}
 }
 

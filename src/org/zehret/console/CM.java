@@ -15,7 +15,8 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import org.zehret.console.util.ConsoleProperties;
+import org.zehret.console.data.error.Errors;
+import org.zehret.console.util.ConsoleConfiguration;
 import org.zehret.console.util.PL;
 
 import javax.swing.JButton;
@@ -24,6 +25,7 @@ import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 import java.awt.Label;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -80,7 +82,8 @@ public class CM
 			@Override
 			public void mousePressed(MouseEvent arg0)
 			{
-				System.exit(0);
+				CM.easterEgg();
+				
 			}
 		});
 		btnNewButton.setRequestFocusEnabled(true);
@@ -100,10 +103,33 @@ public class CM
 		try {
 			//A16.2018.12.24-20:34:26
 			//VVV YYYY.MO.DA-HH:MI:SE
-				versionInformationLabel.setText("Console Version " + ConsoleProperties.version.getVersion() + " (" + PL.resolveDateTimeFormat((ConsoleProperties.YEAR_CODE + "." + ConsoleProperties.MONTH_CODE + "." + ConsoleProperties.DATE_CODE + "-" + ConsoleProperties.HOUR_CODE + ":" + ConsoleProperties.MINUTE_CODE + ":" + ConsoleProperties.SECONDS_CODE) + ")")); }catch(NullPointerException e) {}
+				versionInformationLabel.setText("Console Version " + ConsoleConfiguration.version.getVersion() + " (" + PL.resolveDateTimeFormat((ConsoleConfiguration.YEAR_CODE + "." + ConsoleConfiguration.MONTH_CODE + "." + ConsoleConfiguration.DATE_CODE + "-" + ConsoleConfiguration.HOUR_CODE + ":" + ConsoleConfiguration.MINUTE_CODE + ":" + ConsoleConfiguration.SECONDS_CODE) + ")")); }catch(NullPointerException e) {}
 		jf.getContentPane().add(versionInformationLabel, gbc_versionInformationLabel);
 		jf.setLocationRelativeTo(null);
 		jf.setVisible(true);
 		Toolkit.getDefaultToolkit().beep();			
+	}
+	protected static void easterEgg() {
+//		ConsoleConfiguration.BACKGROUND_COLOR = Color.blue;
+//		ConsoleConfiguration.TEXT_COLOR = Color.white;
+//		ConsoleConfiguration.CONSOLE_FONT = new Font("Consolas", Font.PLAIN, 14);
+//		ConsoleConfiguration.FULLSCREEN_MODE = true;
+//		ConsoleConfiguration.SHOW_ENTRY_IDENTIFIER = false;
+//		ConsoleConfiguration.DATE_TIME_PREFIX = "";
+//		ConsoleConfiguration.SHOW_CONSOLE = true;
+//		new Console();
+//		Console.consoleWindow.validate();
+//		Console.consoleWindow.setAlwaysOnTop(true);
+//		Random random = new Random();
+//		String alphabetString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//		for(int j = 0; j < 5000; j++) {
+//			String lineString = "";
+//			int length = random.nextInt(200)+100;
+//			for(int i = 0; i < length; i++) {
+//				lineString +=(alphabetString.charAt(random.nextInt(alphabetString.length())) + "");
+//			}
+//			PL.con(lineString, PL.NONE);
+//		}
+		System.exit(0);
 	}
 }

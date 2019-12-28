@@ -14,10 +14,10 @@ public enum Errors
 	 * 800 - 899
 	 * 900 - 999
 	 * 1000 - 9999 Misc. errors
-	 * 10000 - 99999 Let's never reach this okay?
+	 * 10000 - 99999 
 	 */
 	
-	//0  ------------------------------------ Everything is okay more or less?
+	//0  ------------------------------------ Everything is okay... more or less
 	
 	EXPECTED_EXECUTION("0x0","EXPECTED_EXECUTION","The operation executed as expected."),
 	EXPECTED_SUCCESS("0x1","EXPECTED_SUCCESS","The operation executed successfully as expected"),
